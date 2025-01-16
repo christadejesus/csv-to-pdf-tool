@@ -28,6 +28,10 @@ def main():
                 file_path = checkFilePath(file_name)
                 if not file_path:
                     continue
+                fieldnames = getFieldnames(file_path)
+                if not fieldnames:
+                    continue
+                print(fieldnames)
                 print("So far so good!")
                 break
 
@@ -56,8 +60,22 @@ def checkFilePath(file_name):
         print(Fore.GREEN + "✔ file found")
         return file_path
     else:
-        print(Fore.YELLOW + "File does not exist in your Downloads folder.\nPlease check the file name and try again.\n") 
+        print(Fore.YELLOW + "File does not exist in your Downloads folder.\nPlease check the file location and try again.\n") 
 
+"""  Get available fieldnames from .csv file and return list of fieldnames """
+def getFieldnames(file_path):
+    with open(file_path) as csv_file:
+        reader = csv.DictReader(csv_file)
+
+        try:
+            header = next(reader)
+            fieldnames = []
+            for key in header:
+                fieldnames.append(key)
+            return fieldnames
+
+        except StopIteration:
+            print(Fore.YELLOW + "No fieldnames found.\nPlease check the file content and try again.\n")
 
 if __name__ == "__main__":
     main()
