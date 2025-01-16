@@ -154,16 +154,16 @@ def extractData(file_path, selected_fieldnames):
 def createNewCSV(csv_data, selected_fieldnames):
     """
     Creates path for a new CSV file to be temporarily stored in user's Desktop folder,
-    and opens this new file. With CSV DictWriter, it parses the file, creates
-    a header with fieldnames passed in, displays a confirmation message in the terminal,
-    and returns the file path.
+    and opens this new file. Using CSV DictWriter, it parses the passed in csv data
+    and fieldnames, writes the data to the new file, displays a confirmation message
+    in the terminal, and returns the new csv file path.
 
     Parameters:
         csv_data (list): A list of dictionaries including all CSV data to be included.
         selected_fieldnames (list): A list of fieldnames selected by the user.
 
     Returns:
-        list: A list of dictionaries with all data from the CSV file to be included in PDF.
+        str: Path to the new CSV file.
     """
     today = date.today().strftime("%m%d%y")
     desktop_folder = Path.home() / "Desktop"
