@@ -39,7 +39,7 @@ def checkFileType(file_name, ext):
         print(Fore.GREEN + f"✔ {ext} file")
         return True
     else:
-        print(Fore.YELLOW + f"Not a valid file.\nPlease check the file name and try again.\n")
+        print(Fore.YELLOW + f"Not a valid {ext} file.\nPlease check the file name and try again.\n")
         return False
 
 if __name__ == "__main__":
