@@ -148,7 +148,7 @@ def extractData(file_path, selected_fieldnames):
         for row in csv_reader:
             row = {key: value for key, value in row.items() if key in selected_fieldnames}
             csv_data.append(row)
-        print(Fore.GREEN + "✔ data selected")
+        print(Fore.GREEN + "✔ CSV data extracted")
         return csv_data
 
 if __name__ == "__main__":
