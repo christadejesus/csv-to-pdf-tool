@@ -31,7 +31,9 @@ def main():
                 sys.exit(Fore.CYAN + "\nHave an awesome day!\n")
 
     csv_data = extractData(file_path, selected_fieldnames)
-    print(csv_data)
+    new_csv_path = createNewCSV(csv_data, selected_fieldnames)
+
+    print(new_csv_path)
 
     sys.exit(Fore.CYAN + "\nHave an awesome day!\n")
 
@@ -111,8 +113,6 @@ def presentFieldnames(fieldnames):
                 if confirmFieldnames(selected_fieldnames):
                     print(Fore.GREEN + "✔ fieldnames confirmed")
                     break
-                else:
-                    print("trying again!")
             else:
                 print(Fore.YELLOW + "Invalid input. Please select numbers within the provided range.")
 
@@ -150,6 +150,33 @@ def extractData(file_path, selected_fieldnames):
             csv_data.append(row)
         print(Fore.GREEN + "✔ CSV data extracted")
         return csv_data
+
+def createNewCSV(csv_data, selected_fieldnames):
+    """
+    Creates path for a new CSV file to be temporarily stored in user's Desktop folder,
+    and opens this new file. With CSV DictWriter, it parses the file, creates
+    a header with fieldnames passed in, displays a confirmation message in the terminal,
+    and returns the file path.
+
+    Parameters:
+        csv_data (list): A list of dictionaries including all CSV data to be included.
+        selected_fieldnames (list): A list of fieldnames selected by the user.
+
+    Returns:
+        list: A list of dictionaries with all data from the CSV file to be included in PDF.
+    """
+    today = date.today().strftime("%m%d%y")
+    desktop_folder = Path.home() / "Desktop"
+    new_csv_file_name = f"pwm_backup_{today}.csv"
+    new_csv_path = desktop_folder / new_csv_file_name
+
+    with open(new_csv_path, 'w', newline='') as new_csv:
+        writer = csv.DictWriter(new_csv, fieldnames=selected_fieldnames)
+        writer.writeheader()
+        writer.writerows(csv_data)
+    print(Fore.GREEN + "✔ new CSV created")
+    return new_csv_path
+
 
 if __name__ == "__main__":
     main()
