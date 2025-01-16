@@ -32,8 +32,9 @@ def main():
 
     csv_data = extractData(file_path, selected_fieldnames)
     new_csv_path = createNewCSV(csv_data, selected_fieldnames)
-
-    print(new_csv_path)
+    pdf_file_name = createPDF(new_csv_path)
+    removeBackupCSV(new_csv_path)
+    print(f"\n{pdf_file_name} was saved to your Desktop.\nRemember to delete this file when finished printing to keep your passwords secure.\n")
 
     sys.exit(Fore.CYAN + "\nHave an awesome day!\n")
 
@@ -177,6 +178,62 @@ def createNewCSV(csv_data, selected_fieldnames):
     print(Fore.GREEN + "✔ new CSV created")
     return new_csv_path
 
+def createPDF(new_csv_path):
+    """
+    Creates new PDF spreadsheet from the newly generated CSV file, saved to the user Desktop.
+    Prints confirmation message to the terminal and returns the PDF file name.
+
+    Parameters:
+        new_csv_path (str): Path to the new CSV file.
+
+    Returns:
+        str: Name of the new PDF file.
+    """
+    today = date.today().strftime("%m%d%y")
+    desktop_folder = Path.home() / "Desktop"
+    pdf_file_name = f"pwm_backup_{today}.pdf"
+    pdf_path = desktop_folder / pdf_file_name
+
+    # create PDF from csv file
+    with open(new_csv_path, encoding="utf8") as csv_file:
+        data = list(csv.reader(csv_file, delimiter=","))
+
+    class PDF(FPDF):
+        def header(self):
+            self.set_font("helvetica", style="B", size=16)
+            self.cell(0, 10, text=f"Password Manager Backup - {today}", align="C")
+            self.ln(20)
+
+        def footer(self):
+            self.set_y(-15)
+            self.set_font("helvetica", style="I", size=8)
+            self.cell(0, 10, f"Page {self.page_no()}/{{nb}}", align="C")
+
+    pdf = PDF(orientation="L", unit="mm", format="Letter")
+    pdf.set_font("helvetica", size=8)
+
+    # Creat a table from data in the new csv file
+    pdf.add_page()
+    headings_style = FontFace(emphasis="BOLD")
+
+    with pdf.table(
+        cell_fill_color=(230, 230, 230),
+        cell_fill_mode=TableCellFillMode.ROWS
+    ) as table:
+        for data_row in data:
+            row = table.row()
+            for item in data_row:
+                row.cell(item)
+
+    # Output the PDF file to the Desktop
+    pdf.output(pdf_path)
+    print(Fore.GREEN + "✔ new PDF created")
+    return pdf_file_name
+
+""" Delete the temporary CSV file and display confirmation to user. """
+def removeBackupCSV(new_csv_path):
+    os.remove(new_csv_path)
+    print(Fore.GREEN + "✔ new CSV removed")
 
 if __name__ == "__main__":
     main()
