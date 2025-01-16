@@ -25,11 +25,13 @@ def main():
                 if validateFileExtension(file_name, ".csv") and (file_path := verifyFileExists(file_name)):
                     if fieldnames := extractCSVFieldnames(file_path):
                         selected_fieldnames = presentFieldnames(fieldnames)
-                        print("So far so good!")
                         break
 
             except KeyboardInterrupt:
                 sys.exit(Fore.CYAN + "\nHave an awesome day!\n")
+
+    csv_data = extractData(file_path, selected_fieldnames)
+    print(csv_data)
 
     sys.exit(Fore.CYAN + "\nHave an awesome day!\n")
 
@@ -128,6 +130,26 @@ def confirmFieldnames(selected_fieldnames):
     if next_step == "Y" or next_step == "YES":
         return True
 
+def extractData(file_path, selected_fieldnames):
+    """
+    Extracts data from the CSV file at the given path.
+
+    Parameters:
+        file_path (str): Path to the CSV file.
+        selected_fieldnames (list): A list of fieldnames selected by the user.
+
+    Returns:
+        list: A list of dictionaries with all data from the CSV file to be included in PDF.
+    """
+    csv_data = []
+
+    with open(file_path, 'r') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            row = {key: value for key, value in row.items() if key in selected_fieldnames}
+            csv_data.append(row)
+        print(Fore.GREEN + "✔ data selected")
+        return csv_data
 
 if __name__ == "__main__":
     main()
