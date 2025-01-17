@@ -28,8 +28,10 @@ def main():
                     # Select & extract
                     selected_fieldnames = presentFieldnames(fieldnames)
                     csv_data = extractData(file_path, selected_fieldnames)
+                    sorted_data = sortData(csv_data, selected_fieldnames)
+                    cleaned_data = cleanData(sorted_data)
                     # Create
-                    new_csv_path = createNewCSV(csv_data, selected_fieldnames)
+                    new_csv_path = createNewCSV(cleaned_data, selected_fieldnames)
                     pdf_file_name = createPDF(new_csv_path)
                     # Clean up
                     removeBackupCSV(new_csv_path)
@@ -159,11 +161,40 @@ def extractData(file_path, selected_fieldnames):
             row = {key: value for key, value in row.items() if key in selected_fieldnames}
             csv_data.append(row)
 
-        # Sort data alphabetically by the first fieldname
-        sorted_csv_data = sorted(csv_data, key=lambda item: item[selected_fieldnames[0]])
-
         print(Fore.GREEN + "✔ CSV data extracted")
-        return sorted_csv_data
+        return csv_data
+
+def sortData(csv_data, selected_fieldnames):
+    # Sort data alphabetically by the first fieldname
+        return sorted(csv_data, key=lambda item: item[selected_fieldnames[0]])
+
+""" 
+Iterating through list of dicts:
+
+for item in my_list_of_dicts:
+    for value in item.values():
+        if value == "one":
+            print(value)
+"""
+def cleanData(data):
+    # Clean up any long URIs (e.g., https://site.com/login?redirect=%bla%bla%bla becomes https://site.com)
+    pattern = re.compile(r"((https?://)?(www\.)?[\w\-]+(\.[a-zA-Z]{2,})+)(/)?")
+    #regex = re.search(r"^([http]*s*[:/]*[a-zA-Z0-9-.]+)(/\.)?", data )
+    cleaned_data = []
+
+    for item in data:
+        cleaned_item = {}
+        for key, value in item.items():         
+            if isinstance(value, str):
+                match = pattern.search(value)
+                if match:
+                    cleaned_item[key] = match.group(1)
+                else:
+                    cleaned_item[key] = value
+            else:
+                cleaned_item[key] = value
+        cleaned_data.append(cleaned_item)
+    return cleaned_data
 
 def createNewCSV(csv_data, selected_fieldnames):
     """
