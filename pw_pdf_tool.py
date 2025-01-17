@@ -177,9 +177,8 @@ for item in my_list_of_dicts:
             print(value)
 """
 def cleanData(data):
-    # Clean up any long URIs (e.g., https://site.com/login?redirect=%bla%bla%bla becomes https://site.com)
+    # Clean up any long URIs (e.g., https://site.subsite.com/login?redirect=%bla%bla%bla becomes https://site.com)
     pattern = re.compile(r"((https?://)?(www\.)?[\w\-]+(\.[a-zA-Z]{2,})+)(/)?")
-    #regex = re.search(r"^([http]*s*[:/]*[a-zA-Z0-9-.]+)(/\.)?", data )
     cleaned_data = []
 
     for item in data:
