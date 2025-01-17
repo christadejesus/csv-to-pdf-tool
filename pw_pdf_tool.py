@@ -108,7 +108,7 @@ def presentFieldnames(fieldnames):
     while True:
         try:
             # Display fieldnames with numbers
-            print("\nPlease select which fieldnames to include by entering the numbers (e.g., 1, 3, 5):")
+            print("\nPlease select which fieldnames to include by entering the numbers (e.g., 1, 3, 5).\nData will be sorted alphabetically by your first fieldname.")
             for i, fieldname in enumerate(fieldnames, 1):
                 print(f"{i} - {fieldname}")
             selected_numbers = input("\nEnter your selections: ").strip()
@@ -158,8 +158,12 @@ def extractData(file_path, selected_fieldnames):
         for row in csv_reader:
             row = {key: value for key, value in row.items() if key in selected_fieldnames}
             csv_data.append(row)
+
+        # Sort data alphabetically by the first fieldname
+        sorted_csv_data = sorted(csv_data, key=lambda item: item[selected_fieldnames[0]])
+
         print(Fore.GREEN + "✔ CSV data extracted")
-        return csv_data
+        return sorted_csv_data
 
 def createNewCSV(csv_data, selected_fieldnames):
     """
