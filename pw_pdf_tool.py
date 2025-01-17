@@ -17,33 +17,42 @@ def main():
     f = pyfiglet.figlet_format("PW PDF Tool", font="standard")
     print(Fore.YELLOW + f)
     """ Display program purpose """
-    print("Welcome to the PW PDF Tool!\nLet's quickly convert your exported password manager CSV\nto a clean, customized, and printable PDF.\n")
+    print("Welcome to the PW PDF Tool!\nLet's convert your exported password manager CSV\nto a clean, customized, and printable PDF.")
 
     while True:
             try:
-                file_name = input("Enter the name of your CSV file (e.g., pw_export.csv): ").strip()
-                if validateFileExtension(file_name, ".csv") and (file_path := verifyFileExists(file_name)):
-                    if fieldnames := extractCSVFieldnames(file_path):
-                        selected_fieldnames = presentFieldnames(fieldnames)
-                        break
+                # Input prompt
+                file_name = input("\nEnter the name of your CSV file (e.g., pw_export.csv): ").strip()
+                # Validate, verify, extract
+                if validateFileExtension(file_name, ".csv") and (file_path := verifyFileExists(file_name)) and (fieldnames := extractCSVFieldnames(file_path)):
+                    # Select & extract
+                    selected_fieldnames = presentFieldnames(fieldnames)
+                    csv_data = extractData(file_path, selected_fieldnames)
+                    # Create
+                    new_csv_path = createNewCSV(csv_data, selected_fieldnames)
+                    pdf_file_name = createPDF(new_csv_path)
+                    # Clean up
+                    removeBackupCSV(new_csv_path)
+                    # Inform
+                    print(f"\n{pdf_file_name} was saved to your Desktop.\nRemember to delete this file when finished printing to keep your passwords secure.\n")
+                    # Repeat or exit
+                    next = input("Would you like to create another PDF? Enter Y or N:  ").upper().strip()
+                    if next == "Y" or next =="YES":
+                        continue
+                    else:
+                        f = pyfiglet.figlet_format("\nGoodbye   : )\n", font="standard")
+                        sys.exit(Fore.YELLOW + f)
 
             except KeyboardInterrupt:
-                sys.exit(Fore.CYAN + "\nHave an awesome day!\n")
-
-    csv_data = extractData(file_path, selected_fieldnames)
-    new_csv_path = createNewCSV(csv_data, selected_fieldnames)
-    pdf_file_name = createPDF(new_csv_path)
-    removeBackupCSV(new_csv_path)
-    print(f"\n{pdf_file_name} was saved to your Desktop.\nRemember to delete this file when finished printing to keep your passwords secure.\n")
-
-    sys.exit(Fore.CYAN + "\nHave an awesome day!\n")
+                f = pyfiglet.figlet_format("\nGoodbye   : )\n", font="standard")
+                sys.exit(Fore.YELLOW + f)
 
 def validateFileExtension(file_name, ext):
     if file_name.endswith(ext) == True:
         print(Fore.GREEN + f"✔ {ext} file")
         return True
     else:
-        print(Fore.YELLOW + f"Not a valid {ext} file.\nPlease check the file name and try again.\n")
+        print(Fore.YELLOW + f"Not a valid {ext} file.\nPlease check the file name and try again.")
         return False
 
 def verifyFileExists(file_name):
@@ -55,7 +64,7 @@ def verifyFileExists(file_name):
         print(Fore.GREEN + "✔ file found")
         return file_path
     else:
-        print(Fore.YELLOW + "File does not exist in your Downloads folder.\nPlease check the file location and try again.\n") 
+        print(Fore.YELLOW + "File does not exist in your Downloads folder.\nPlease check the file location and try again.") 
 
 def extractCSVFieldnames(file_path):
     """
@@ -81,7 +90,7 @@ def extractCSVFieldnames(file_path):
             return fieldnames
 
         except StopIteration:
-            print(Fore.YELLOW + "No fieldnames found.\nPlease check the file content and try again.\n")
+            print(Fore.YELLOW + "No fieldnames found.\nPlease check the file content and try again.")
             return False
 
 def presentFieldnames(fieldnames):
