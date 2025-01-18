@@ -51,7 +51,7 @@ def main():
 
 def validateFileExtension(file_name, ext):
     if file_name.endswith(ext) == True:
-        print(Fore.GREEN + f"✔ {ext} file")
+        print(Fore.GREEN + f"+ File is {ext}")
         return True
     else:
         print(Fore.YELLOW + f"Not a valid {ext} file.\nPlease check the file name and try again.")
@@ -63,7 +63,7 @@ def verifyFileExists(file_name):
     file_path = downloads_folder / file_name
 
     if file_path.exists():
-        print(Fore.GREEN + "✔ file found")
+        print(Fore.GREEN + "+ File located")
         return file_path
     else:
         print(Fore.YELLOW + "File does not exist in your Downloads folder.\nPlease check the file location and try again.") 
@@ -89,7 +89,7 @@ def extractCSVFieldnames(file_path):
             fieldnames = []
             for key in header:
                 fieldnames.append(key)
-            print(Fore.GREEN + "✔ fieldnames extracted")
+            print(Fore.GREEN + "+ Fieldnames extracted")
             return fieldnames
 
         except StopIteration:
@@ -124,7 +124,7 @@ def presentFieldnames(fieldnames):
                 # Select the corresponding fieldnames
                 selected_fieldnames = [fieldnames[i - 1] for i in selections]  # Convert user input to zero-indexed
                 if confirmFieldnames(selected_fieldnames):
-                    print(Fore.GREEN + "✔ fieldnames confirmed")
+                    print(Fore.GREEN + "+ Fieldnames confirmed")
                     break
             else:
                 print(Fore.YELLOW + "Invalid input. Please select numbers within the provided range.")
@@ -162,7 +162,7 @@ def extractData(file_path, selected_fieldnames):
             row = {key: value for key, value in row.items() if key in selected_fieldnames}
             csv_data.append(row)
 
-        print(Fore.GREEN + "✔ CSV data extracted")
+        print(Fore.GREEN + "+ CSV data extracted")
         return csv_data
 
 def sortData(csv_data, selected_fieldnames):
@@ -219,7 +219,7 @@ def createNewCSV(csv_data, selected_fieldnames):
         writer = csv.DictWriter(new_csv, fieldnames=selected_fieldnames)
         writer.writeheader()
         writer.writerows(csv_data)
-    print(Fore.GREEN + "✔ new CSV created")
+    print(Fore.GREEN + "+ New CSV created")
     return new_csv_path
 
 def createPDF(new_csv_path):
@@ -271,13 +271,13 @@ def createPDF(new_csv_path):
 
     # Output the PDF file to the Desktop
     pdf.output(pdf_path)
-    print(Fore.GREEN + "✔ new PDF created")
+    print(Fore.GREEN + "+ New PDF created")
     return pdf_file_name
 
 """ Delete the temporary CSV file and display confirmation to user. """
 def removeBackupCSV(new_csv_path):
     os.remove(new_csv_path)
-    print(Fore.GREEN + "✔ new CSV removed")
+    print(Fore.GREEN + "+ New CSV removed")
 
 if __name__ == "__main__":
     main()
