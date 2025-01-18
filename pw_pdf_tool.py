@@ -67,6 +67,7 @@ def verifyFileExists(file_name):
         return file_path
     else:
         print(Fore.YELLOW + "File does not exist in your Downloads folder.\nPlease check the file location and try again.") 
+        return False
 
 def extractCSVFieldnames(file_path):
     """
