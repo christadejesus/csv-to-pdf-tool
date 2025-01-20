@@ -29,10 +29,10 @@ def main():
                     # Select & extract
                     selected_fieldnames = presentFieldnames(fieldnames)
                     csv_data = extractData(file_path, selected_fieldnames)
-                    sorted_data = sortData(csv_data, selected_fieldnames)
-                    cleaned_data = cleanData(sorted_data)
+                    cleaned_data = cleanData(csv_data)
+                    sorted_data = sortData(cleaned_data, selected_fieldnames)
                     # Create
-                    new_csv_path = createNewCSV(cleaned_data, selected_fieldnames)
+                    new_csv_path = createNewCSV(sorted_data, selected_fieldnames)
                     pdf_file_name = createPDF(new_csv_path)
                     # Clean up
                     removeBackupCSV(new_csv_path)
@@ -170,10 +170,6 @@ def extractData(file_path, selected_fieldnames):
         print(Fore.GREEN + "+ CSV data extracted")
         return csv_data
 
-def sortData(csv_data, selected_fieldnames):
-    # Sort data alphabetically by the first fieldname
-        return sorted(csv_data, key=lambda item: item[selected_fieldnames[0]])
-
 """ 
 Iterating through list of dicts:
 
@@ -200,6 +196,10 @@ def cleanData(data):
                 cleaned_item[key] = value
         cleaned_data.append(cleaned_item)
     return cleaned_data
+
+def sortData(data, selected_fieldnames):
+    # Sort data alphabetically by the first fieldname
+        return sorted(data, key=lambda item: item[selected_fieldnames[0]])
 
 def createNewCSV(csv_data, selected_fieldnames):
     """
