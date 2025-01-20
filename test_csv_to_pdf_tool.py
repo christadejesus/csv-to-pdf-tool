@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
-from pw_pdf_tool import validateFileExtension
-from pw_pdf_tool import verifyFileExists
+from csv_to_pdf_tool import validateFileExtension
+from csv_to_pdf_tool import verifyFileExists
 
 # Function takes in file name as user input and expected extension to validate
 def test_file_ext():

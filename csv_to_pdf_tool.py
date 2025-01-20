@@ -2,6 +2,7 @@ import csv
 import re
 import sys
 import os
+import time
 from pathlib import Path
 from datetime import date
 from fpdf import FPDF
@@ -14,11 +15,11 @@ def main():
     """ Reset all text color changes after each print """
     init(autoreset=True) 
     """ Display program name as ASCII character text banner """
-    f = pyfiglet.figlet_format("PW PDF Tool", font="standard")
+    f = pyfiglet.figlet_format("CSV to PDF Tool", font="standard")
     print(Fore.YELLOW + f)
     """ Display program purpose """
-    print("Welcome to the PW PDF Tool!\nLet's convert your exported password manager CSV\nto a clean, customized, and printable PDF.")
-
+    print("Welcome to the CSV to PDF Tool!\nThis tool converts your CSV, or Comma Separated Values,\ndocument to a clean, customized, and printable PDF.")
+    print("Please make sure your CSV document has been dowloaded into your Downloads folder.")
     while True:
             try:
                 # Input prompt
@@ -36,18 +37,22 @@ def main():
                     # Clean up
                     removeBackupCSV(new_csv_path)
                     # Inform
-                    print(f"\n{pdf_file_name} was saved to your Desktop.\nRemember to delete this file when finished printing to keep your passwords secure.\n")
+                    print(f"\n{pdf_file_name} was saved to your Desktop.\n")
                     # Repeat or exit
                     next = input("Would you like to create another PDF? Enter Y or N:  ").upper().strip()
                     if next == "Y" or next =="YES":
                         continue
                     else:
-                        f = pyfiglet.figlet_format("\nGoodbye   : )\n", font="standard")
-                        sys.exit(Fore.YELLOW + f)
+                        f = pyfiglet.figlet_format(f"\nEnjoy your day!\n : )\n", font="standard")
+                        print(Fore.YELLOW + f)
+                        time.sleep(3) # Pause for 3 seconds
+                        sys.exit()
 
             except KeyboardInterrupt:
-                f = pyfiglet.figlet_format("\nGoodbye   : )\n", font="standard")
-                sys.exit(Fore.YELLOW + f)
+                f = pyfiglet.figlet_format(f"\nEnjoy your day!\n :  )\n", font="standard")
+                print(Fore.YELLOW + f)
+                time.sleep(3) # Pause for 3 seconds
+                sys.exit()
 
 def validateFileExtension(file_name, ext):
     if file_name.endswith(ext) == True:

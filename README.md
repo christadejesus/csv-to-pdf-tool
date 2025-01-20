@@ -1,10 +1,10 @@
-# PW PDF Tool
+# CSV to PDF Tool
 
 ## Description
-PW PDF Tool is a Python-based script that converts an exported password manager CSV file into a clean, customized, and printable PDF. It allows the user to select which fields from the CSV to include, sorts the data alphabetically, and generates a neatly formatted PDF with a table layout. The tool also ensures that sensitive files, like the temporary CSV, are removed after generating the PDF to maintain data security.
+CSV to PDF Tool is a Python-based script that converts an exported CSV, or Comma Separated Values, document to a clean, customized, and printable PDF. It allows the user to select which fields from the CSV to include, sorts the data alphabetically, and generates a neatly formatted PDF with a table layout. The tool also ensures that potentially sensitive files, like the temporary CSV, are removed after generating the PDF to maintain data security.
 
 ## Features
-- Converts CSV password exports to printable PDFs.
+- Converts CSV exports to printable PDFs.
 - Customizable field selection for CSV data.
 - Alphabetically sorts the CSV data based on the first selected field.
 - Cleans up long URLs, ensuring they are displayed in a concise format.
@@ -26,7 +26,7 @@ pip install fpdf colorama pyfiglet
 ```
 
 ## Usage
-- Export your password manager's data as a CSV file and save it to your Downloads folder.
+- Export your data as a CSV file and save it to your Downloads folder.
 - Run the Python script, and it will prompt you to enter the name of the CSV file.
 - The program will validate the file, extract the fieldnames, and allow you to select which ones to include in the PDF.
 - The data is cleaned, sorted, and written to a new CSV file.
@@ -47,7 +47,7 @@ python pw_pdf_tool.py
 - Add password encryption to the PDF for enhanced security.
 - More robust unit testing to ensure reliability and catch edge cases.
 - Update and expand upon "Usage" section of this README.
-- Add case study explaining my process, challenges faced, and how the project evolved to solve a real-world problem. 
+- Add case study explaining my process, challenges faced, and how the project evolved to solve real-world problems. 
 
 ## Get in Touch
 If you have any questions, suggestions, or want to contribute to this project, feel free to reach out:
