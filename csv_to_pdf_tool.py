@@ -23,7 +23,7 @@ def main():
     while True:
             try:
                 # Input prompt
-                file_name = input("\nEnter the name of your CSV file (e.g., pw_export.csv): ").strip()
+                file_name = input("\nEnter the name of your CSV file to be converted (e.g., my_data_export.csv): ").strip()
                 # Validate, verify, extract
                 if validateFileExtension(file_name, ".csv") and (file_path := verifyFileExists(file_name)) and (fieldnames := extractCSVFieldnames(file_path)):
                     # Select & extract
@@ -32,12 +32,14 @@ def main():
                     cleaned_data = cleanData(csv_data)
                     sorted_data = sortData(cleaned_data, selected_fieldnames)
                     # Create
+                    # Input prompt
+                    new_file_name = getFileName(".pdf")
                     new_csv_path = createNewCSV(sorted_data, selected_fieldnames)
-                    pdf_file_name = createPDF(new_csv_path)
+                    createPDF(new_csv_path, new_file_name)
                     # Clean up
                     removeBackupCSV(new_csv_path)
                     # Inform
-                    print(f"\n{pdf_file_name} was saved to your Desktop.\n")
+                    print(f"\n{new_file_name} was saved to your Desktop.\n")
                     # Repeat or exit
                     next = input("Would you like to create another PDF? Enter Y or N:  ").upper().strip()
                     if next == "Y" or next =="YES":
@@ -201,6 +203,22 @@ def sortData(data, selected_fieldnames):
     # Sort data alphabetically by the first fieldname
         return sorted(data, key=lambda item: item[selected_fieldnames[0]])
 
+def getFileName(extension):
+    while True:
+        try:
+            file_name = input(f"\nEnter a name for your new {extension} file (e.g., my_new_file{extension}): ").strip()
+            file_name_lower = file_name.lower()
+            valid_chars = re.search(r"^[a-z0-9-_]+.pdf$", file_name_lower)
+
+            if valid_chars:
+                return f"{file_name}"
+            else:
+                print(Fore.YELLOW + f"File names may contain only letters, numbers, dashes, or underscores (e.g., my_new_file{extension}).\n Please try again.")
+                continue
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
+            
+
 def createNewCSV(csv_data, selected_fieldnames):
     """
     Creates path for a new CSV file to be temporarily stored in user's Desktop folder,
@@ -215,9 +233,8 @@ def createNewCSV(csv_data, selected_fieldnames):
     Returns:
         str: Path to the new CSV file.
     """
-    today = date.today().strftime("%m%d%y")
     desktop_folder = Path.home() / "Desktop"
-    new_csv_file_name = f"pwm_backup_{today}.csv"
+    new_csv_file_name = f"temp.csv"
     new_csv_path = desktop_folder / new_csv_file_name
 
     with open(new_csv_path, 'w', newline='') as new_csv:
@@ -227,7 +244,7 @@ def createNewCSV(csv_data, selected_fieldnames):
     print(Fore.GREEN + "+ New CSV created")
     return new_csv_path
 
-def createPDF(new_csv_path):
+def createPDF(new_csv_path, file_name):
     """
     Creates new PDF spreadsheet from the newly generated CSV file, saved to the user Desktop.
     Prints confirmation message to the terminal and returns the PDF file name.
@@ -238,10 +255,8 @@ def createPDF(new_csv_path):
     Returns:
         str: Name of the new PDF file.
     """
-    today = date.today().strftime("%m%d%y")
     desktop_folder = Path.home() / "Desktop"
-    pdf_file_name = f"pwm_backup_{today}.pdf"
-    pdf_path = desktop_folder / pdf_file_name
+    pdf_path = desktop_folder / file_name
 
     # create PDF from csv file
     with open(new_csv_path, encoding="utf8") as csv_file:
@@ -250,7 +265,7 @@ def createPDF(new_csv_path):
     class PDF(FPDF):
         def header(self):
             self.set_font("helvetica", style="B", size=16)
-            self.cell(0, 10, text=f"Password Manager Backup - {today}", align="C")
+            self.cell(0, 10, text=f"{file_name}", align="C")
             self.ln(20)
 
         def footer(self):
@@ -277,7 +292,6 @@ def createPDF(new_csv_path):
     # Output the PDF file to the Desktop
     pdf.output(pdf_path)
     print(Fore.GREEN + "+ New PDF created")
-    return pdf_file_name
 
 """ Delete the temporary CSV file and display confirmation to user. """
 def removeBackupCSV(new_csv_path):
