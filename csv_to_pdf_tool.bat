@@ -2,4 +2,4 @@
 :: Don't forget to change the name and/or path to match your chosen file location.::
 
 @echo off
-python C:\Users\<your_name>\Scripts\csv_to_pdf_tool.py %*
+python C:\Users\<your_name>\Desktop\Scripts\csv_to_pdf_tool\csv_to_pdf_tool.py %*

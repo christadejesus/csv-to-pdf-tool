@@ -7,6 +7,7 @@ CSV to PDF Tool is a Python-based script that converts an exported CSV, or Comma
 - Converts CSV exports to printable PDFs.
 - Customizable field selection for CSV data.
 - Customizable PDF file name.
+- Customizable document title.
 - Alphabetically sorts the CSV data based on the first selected field.
 - Cleans up long URLs, ensuring they are displayed in a concise format.
 - Automatically deletes the temporary CSV file after creating the PDF.
