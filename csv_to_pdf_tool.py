@@ -32,7 +32,6 @@ def main():
                     cleaned_data = cleanData(csv_data)
                     sorted_data = sortData(cleaned_data, selected_fieldnames)
                     # Create
-                    # Input prompt
                     new_file_name = getFileName(".pdf")
                     new_csv_path = createNewCSV(sorted_data, selected_fieldnames)
                     createPDF(new_csv_path, new_file_name)
@@ -183,6 +182,7 @@ for item in my_list_of_dicts:
 def cleanData(data):
     # Clean up any long URIs (e.g., https://site.subsite.com/login?redirect=%bla%bla%bla becomes https://site.com)
     pattern = re.compile(r"((https?://)?(www\.)?[\w\-]+(\.[a-zA-Z]{2,})+)(/)?")
+
     cleaned_data = []
 
     for item in data:

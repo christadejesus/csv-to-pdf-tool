@@ -1,11 +1,12 @@
 # CSV to PDF Tool
 
 ## Description
-CSV to PDF Tool is a Python-based script that converts an exported CSV, or Comma Separated Values, document to a clean, customized, and printable PDF. It allows the user to select which fields from the CSV to include, sorts the data alphabetically, and generates a neatly formatted PDF with a table layout. The tool also ensures that potentially sensitive files, like the temporary CSV, are removed after generating the PDF to maintain data security.
+CSV to PDF Tool is a Python-based script that converts an exported CSV, or Comma Separated Values, document to a clean, customized, and printable PDF. It allows the user to select which fields from the CSV to include and determine the name of the new PDF file. The data is sorted and a neatly formatted PDF with a table layout is generated and saved to the Desktop. The tool also ensures that potentially sensitive files, like the temporary CSV, are removed after generating the PDF to maintain data security.
 
 ## Features
 - Converts CSV exports to printable PDFs.
 - Customizable field selection for CSV data.
+- Customizable PDF file name.
 - Alphabetically sorts the CSV data based on the first selected field.
 - Cleans up long URLs, ensuring they are displayed in a concise format.
 - Automatically deletes the temporary CSV file after creating the PDF.
@@ -29,6 +30,7 @@ pip install fpdf colorama pyfiglet
 - Export your data as a CSV file and save it to your Downloads folder.
 - Run the Python script, and it will prompt you to enter the name of the CSV file.
 - The program will validate the file, extract the fieldnames, and allow you to select which ones to include in the PDF.
+- At the prompt, enter a new name for your PDF file.
 - The data is cleaned, sorted, and written to a new CSV file.
 - A PDF is created from this data and saved to your Desktop.
 - The temporary CSV file is deleted after the PDF is generated.
@@ -36,14 +38,14 @@ pip install fpdf colorama pyfiglet
 
 ### Example
 ```
-python pw_pdf_tool.py
+python csv_to_pdf_tool.py
 ```
 ## Future Features under Consideration
 - Integrate a GUI for enhanced user experience, particularly with non-technical users.
 - Overwrite functionality before deletion for more secure file handling.
-- Add capability to save multiple PDF files to the desktop on the same day under different file names. 
 - Dynamically adjusted column widths in the PDF for better formatting.
 - Improve input validation and error handling.
+- Include additional data cleaning beyond URLs, such as phone numbers.
 - Add password encryption to the PDF for enhanced security.
 - More robust unit testing to ensure reliability and catch edge cases.
 - Update and expand upon "Usage" section of this README.
