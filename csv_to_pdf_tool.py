@@ -33,8 +33,9 @@ def main():
                     sorted_data = sortData(cleaned_data, selected_fieldnames)
                     # Create
                     new_file_name = getFileName(".pdf")
+                    title = getTitle(new_file_name)
                     new_csv_path = createNewCSV(sorted_data, selected_fieldnames)
-                    createPDF(new_csv_path, new_file_name)
+                    createPDF(new_csv_path, new_file_name, title)
                     # Clean up
                     removeBackupCSV(new_csv_path)
                     # Inform
@@ -206,7 +207,7 @@ def sortData(data, selected_fieldnames):
 def getFileName(extension):
     while True:
         try:
-            file_name = input(f"\nEnter a name for your new {extension} file (e.g., my_new_file{extension}): ").strip()
+            file_name = input(f"\nEnter a name for your new {extension} file (e.g., my_new_file{extension}): \n").strip()
             file_name_lower = file_name.lower()
             valid_chars = re.search(r"^[a-z0-9-_]+.pdf$", file_name_lower)
 
@@ -218,6 +219,17 @@ def getFileName(extension):
         except KeyboardInterrupt:
             raise KeyboardInterrupt
             
+def getTitle(file_name):
+    while True:
+        try:
+            title = input(f'\nEnter the heading to display at the top of each {file_name} page (e.g. "Login Information - 2/2025"): \n')
+            next_step = input(f"\nEnter 'Y' to accept '{title}', 'N' to try again: ").upper().strip()
+            if next_step == "Y" or next_step == "YES":
+                return title
+            else:
+                continue
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
 
 def createNewCSV(csv_data, selected_fieldnames):
     """
@@ -244,7 +256,7 @@ def createNewCSV(csv_data, selected_fieldnames):
     print(Fore.GREEN + "+ New CSV created")
     return new_csv_path
 
-def createPDF(new_csv_path, file_name):
+def createPDF(new_csv_path, file_name, title):
     """
     Creates new PDF spreadsheet from the newly generated CSV file, saved to the user Desktop.
     Prints confirmation message to the terminal and returns the PDF file name.
@@ -265,7 +277,7 @@ def createPDF(new_csv_path, file_name):
     class PDF(FPDF):
         def header(self):
             self.set_font("helvetica", style="B", size=16)
-            self.cell(0, 10, text=f"{file_name}", align="C")
+            self.cell(0, 10, text=f"{title}", align="C")
             self.ln(20)
 
         def footer(self):
